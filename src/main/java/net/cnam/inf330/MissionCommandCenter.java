@@ -9,9 +9,18 @@ public class MissionCommandCenter {
     private int gridWidth;
     private int gridHeight;
     private List<Rover> rovers;
+    private ArrayList<String> coverageGrid = new ArrayList<>();
 
     // TODO 1) Make MCC a singleton class
+    private static MissionCommandCenter single_instance = null;
 
+    public static MissionCommandCenter getInstance()
+    {
+        if (single_instance == null)
+            single_instance = new MissionCommandCenter();
+
+        return single_instance;
+    }
     /**
      * Create a MCC without a predefined grid size.
      */
@@ -97,11 +106,19 @@ public class MissionCommandCenter {
         } catch (InvalidRoverPositionException e) {
             // TODO 4) b) Don't deploy the rover if its initial position is invalid
             System.out.println("### WARNING : " + e.getMessage());
+            return null;
         }
 
         System.out.println("Controlling rover " + roverId + "...");
         for (Character c : roverInstructions.toCharArray()) {
-            rover.processCommand(RoverCommand.valueOf(String.valueOf(c)));
+
+            try {
+                rover.processCommand(RoverCommand.valueOf(String.valueOf(c)));
+                checkRoverPosition(rover);
+            } catch (InvalidRoverPositionException e) {
+                System.out.println("### WARNING : " + e.getMessage());
+
+            }
             // TODO 4) a) Make the rover pull back if the move is invalid
         }
 
@@ -116,11 +133,16 @@ public class MissionCommandCenter {
      * @throws InvalidRoverPositionException
      */
     public void checkRoverPosition(Rover rover) throws InvalidRoverPositionException {
-        if (rover.getX() > this.gridWidth || rover.getY() > this.gridHeight)
+        if (rover.getX() > this.gridWidth || rover.getY() > this.gridHeight) {
+
             throw new InvalidRoverPositionException(rover,
                     "Position out of grid ! Communication signal weak.");
-
+        }
         // TODO 2) Throw an InvalidRoverPositionException if there is another rover on the rover's current position.
+        for (Rover r : rovers){
+            if (r.getX()==rover.getX() && r.getY()==rover.getY()) throw new InvalidRoverPositionException(rover,
+            "Another rover is already on this position");
+        }
     }
 
     /**
@@ -132,6 +154,9 @@ public class MissionCommandCenter {
      */
     public double computeRoverCoveragePercent(Rover rover) {
         // TODO 6) Compute the rover's grid coverage percentage
+        int nbFullGrid = getGridHeight()*getGridWidth();
+
+
         return 0d;
     }
 
@@ -160,6 +185,9 @@ public class MissionCommandCenter {
         return gridWidth;
     }
 
+    public void setGridWidth(int nb) {
+        this.gridWidth=nb;
+    }
     /**
      * Get the height (Y axis) of the exploration grid.
      *
@@ -168,7 +196,9 @@ public class MissionCommandCenter {
     public int getGridHeight() {
         return gridHeight;
     }
-
+    public void setGridHeight(int nb) {
+        this.gridHeight=nb;
+    }
     /**
      * Get the list of rovers currently managed by the MCC.
      *

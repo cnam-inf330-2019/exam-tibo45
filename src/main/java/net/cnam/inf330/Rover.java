@@ -8,6 +8,8 @@ public class Rover {
     private int id;
     private int x;
     private int y;
+    private int xstart;
+    private int ystart;
     private Orientation o;
 
     /**
@@ -20,6 +22,8 @@ public class Rover {
      */
     public Rover(int id, int x, int y, Orientation o) {
         this.id = id;
+        this.xstart = x;
+        this.ystart =y;
         this.x = x;
         this.y = y;
         this.o = o;
@@ -148,5 +152,13 @@ public class Rover {
      */
     public Orientation getO() {
         return o;
+    }
+
+    public int getYstart() {
+        return ystart;
+    }
+
+    public int getXstart() {
+        return xstart;
     }
 }

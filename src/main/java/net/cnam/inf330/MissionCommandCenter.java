@@ -24,6 +24,7 @@ public class MissionCommandCenter {
     /**
      * Create a MCC without a predefined grid size.
      */
+    // FIXME Constructor should be made private
     public MissionCommandCenter() {
         this.gridWidth = -1;
         this.gridHeight = -1;
@@ -36,6 +37,7 @@ public class MissionCommandCenter {
      * @param gridWidth  The width (X axis) of the exploration grid
      * @param gridHeight The height (Y axis) of the exploration grid
      */
+    // FIXME Constructor should be made private
     public MissionCommandCenter(int gridWidth, int gridHeight) {
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
@@ -67,6 +69,7 @@ public class MissionCommandCenter {
             String roverInstructionsData = it.next();
 
             Rover rover = deployAndMoveRover(currentRoverId, roverInitialStateData, roverInstructionsData);
+            // FIXME What if the rover is null ? => NPE
             rovers.add(rover);
             System.out.println("Rover " + currentRoverId + "'s final state : " + rover);
 
@@ -119,7 +122,7 @@ public class MissionCommandCenter {
                 System.out.println("### WARNING : " + e.getMessage());
 
             }
-            // TODO 4) a) Make the rover pull back if the move is invalid
+            // TODO FIXME 4) a) Make the rover pull back if the move is invalid
         }
 
         System.out.println("Terminated communication with rover " + roverId + ".");
@@ -153,7 +156,7 @@ public class MissionCommandCenter {
      * @return The rover's coverage percent as a double
      */
     public double computeRoverCoveragePercent(Rover rover) {
-        // TODO 6) Compute the rover's grid coverage percentage
+        // TODO FIXME 6) Compute the rover's grid coverage percentage
         int nbFullGrid = getGridHeight()*getGridWidth();
 
 
